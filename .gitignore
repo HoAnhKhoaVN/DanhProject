@@ -1,6 +1,6 @@
 __pycache__/*
-Data/*
-*.plk
+# Data/*
+# *.plk
 *.ipynb
 *.xlsx
 *.xls
