@@ -64,7 +64,6 @@ def get_task(
         return None
     # endregion
     
-    # region Lấy dữ liệu
     ban_ve = df[BAN_VE][idx]
     cong_doan = df[CONG_DOAN][idx]
     nha_may = df[NHA_MAY][idx]
@@ -79,26 +78,24 @@ def get_task(
 
     ghi_chep_hang_ngay = get_value_ghi_chep_hang_ngay(idx = idx, _df = df)
 
-    # endregion
-    
-    # region Tạo công việc
-    cv = CongViec(
-        ten_cong_viec= ten_cong_viec,
-        ban_ve= ban_ve,
-        cong_doan= cong_doan,
-        nha_may= nha_may,
-        so_luong= sl,
-        don_vi= dvt,
-        KH_DT_CT= khdtct,
-        PYC= pyc,
-        thoi_gian_du_kien= tgdk,
-        thoi_gian_thuc_te= tgtt,
-        chu_thich= chu_thich,
-        ti_le= tl,
-        ghi_ghep_hang_ngay= ghi_chep_hang_ngay
-    )
-    # endregion
-    return cv
+    if ghi_chep_hang_ngay:
+        cv = CongViec(
+            ten_cong_viec= ten_cong_viec,
+            ban_ve= ban_ve,
+            cong_doan= cong_doan,
+            nha_may= nha_may,
+            so_luong= sl,
+            don_vi= dvt,
+            KH_DT_CT= khdtct,
+            PYC= pyc,
+            thoi_gian_du_kien= tgdk,
+            thoi_gian_thuc_te= tgtt,
+            chu_thich= chu_thich,
+            ti_le= tl,
+            ghi_ghep_hang_ngay= ghi_chep_hang_ngay
+        )
+        return cv
+    return None
 
 if __name__ == "__main__":
     print("dataset/cong_viec.py")

@@ -31,6 +31,7 @@ class NhanVien:
     
     def get_cac_cong_viec_trong_thang(self):
         return len(self.dict_ghi_chep_cong_viec)
+    
 
 
 def get_value_for_staff(

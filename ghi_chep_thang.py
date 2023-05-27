@@ -24,6 +24,8 @@ class GhiChepThang:
 
     def so_nhan_vien(self):
         return len(self.dict_nhan_vien)
+    
+    
 
 
 def clear_dataframe(df: pd.DataFrame)-> pd.DataFrame:
@@ -77,7 +79,8 @@ def get_ghi_chep_hang_tháng(
             manv= manv,
             df = temp_df
         )
-        dict_nhan_vien[nv.msnv] = nv
+        if nv:
+            dict_nhan_vien[nv.msnv] = nv
 
     # Trả về ghi chép trong tháng
     return GhiChepThang(

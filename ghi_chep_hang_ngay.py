@@ -24,7 +24,7 @@ class TangCa:
         pass
 
     def is_null(self):
-        pass
+        return not self.gio and not self.ti_le
         
 
 class HanhChanh:
@@ -42,7 +42,7 @@ class HanhChanh:
         pass
 
     def is_null(self):
-        pass
+        return not self.gio and not self.ti_le and not self.TSN_nghi
 
 
 class GhiChepHangNgay:
@@ -56,11 +56,21 @@ class GhiChepHangNgay:
         ti_le_TC: float,
     ) -> None:
         self.ngay = ngay
-        self.tang_ca = TangCa(gio_TC, ti_le_TC)
-        self.hanh_chanh = HanhChanh(gio_HC, ti_le_HC, TSN_nghi_HC)
+        if not gio_HC and not ti_le_HC and not TSN_nghi_HC:
+            self.hanh_chanh = None
+        else:
+            self.hanh_chanh = HanhChanh(gio_HC, ti_le_HC, TSN_nghi_HC)
+
+        if not gio_TC and not ti_le_TC:
+            self.tang_ca = None
+        else:
+            self.tang_ca = TangCa(gio_TC, ti_le_TC)
+
+        
+        
 
     def is_null(self):
-        pass
+        return not self.hanh_chanh.is_null() and not self.tang_ca.is_null()
     
     def thong_ke(self):
         pass
@@ -86,16 +96,24 @@ def get_value_ghi_chep_hang_ngay(
         tns_nghi = f"{TNS_NGHI}{_ngay}"
         tc_gio = f"{TC_GIO}{_ngay}"
         tc_tl = f"{TC_TL}{_ngay}"
-        lst_ghi_chep_hang_ngay.append(
-            GhiChepHangNgay(
-                ngay= _ngay,
-                gio_HC= _df[hc_gio][idx],
-                ti_le_HC= _df[hc_tl][idx],
-                TSN_nghi_HC= _df[tns_nghi][idx],
-                gio_TC= _df[tc_gio][idx],
-                ti_le_TC = _df[tc_tl][idx]
-            )
+        
+        # Kiểm tra điều kiện để ghi nhận 1 ngày
+        if not hc_gio and \
+           not hc_tl and \
+           not tns_nghi and \
+           not tc_gio and \
+           not tc_tl:
+            return None
+        gchn = GhiChepHangNgay(
+            ngay= _ngay,
+            gio_HC= _df[hc_gio][idx],
+            ti_le_HC= _df[hc_tl][idx],
+            TSN_nghi_HC= _df[tns_nghi][idx],
+            gio_TC= _df[tc_gio][idx],
+            ti_le_TC = _df[tc_tl][idx]
         )
+        lst_ghi_chep_hang_ngay.append(gchn)
+        
     return lst_ghi_chep_hang_ngay
 
 
