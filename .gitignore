@@ -3,4 +3,4 @@ __pycache__/*
 # *.plk
 *.ipynb
 *.xlsx
-*.xls
+# *.xls
