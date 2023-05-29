@@ -1,4 +1,4 @@
-from typing import Text, List
+from typing import Text, List, Dict
 from ghi_chep_hang_ngay import GhiChepHangNgay, get_value_ghi_chep_hang_ngay
 import pandas as pd
 from constant import (
