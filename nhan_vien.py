@@ -29,8 +29,29 @@ class NhanVien:
     def get_msnv(self):
         return self.msnv
     
-    def get_cac_cong_viec_trong_thang(self):
+    def get_so_cong_viec_trong_thang(self):
         return len(self.dict_ghi_chep_cong_viec)
+    
+    def get_cac_cong_viec_trong_thang(self):
+        return self.dict_ghi_chep_cong_viec.keys()
+    
+    def get_so_ngay_cong(self):
+        pass
+
+    def get_so_ngay_nghi_phep(self):
+        pass
+
+    def get_so_ngay_di_tre(self):
+        pass
+
+    def get_so_ngay_ve_som(self):
+        pass
+
+    def get_so_ban_ve_hoan_thanh(self):
+        pass
+
+    def get_so_cong_viec_chua_hoan_thanh(self):
+        pass
     
 
 

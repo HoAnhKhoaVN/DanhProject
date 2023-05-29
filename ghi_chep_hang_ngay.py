@@ -96,21 +96,24 @@ def get_value_ghi_chep_hang_ngay(
         tns_nghi = f"{TNS_NGHI}{_ngay}"
         tc_gio = f"{TC_GIO}{_ngay}"
         tc_tl = f"{TC_TL}{_ngay}"
+
+        # Nhận giá trị
+        gio_HC= _df[hc_gio][idx]
+        ti_le_HC= _df[hc_tl][idx]
+        TSN_nghi_HC= _df[tns_nghi][idx]
+        gio_TC= _df[tc_gio][idx]
+        ti_le_TC = _df[tc_tl][idx]
         
         # Kiểm tra điều kiện để ghi nhận 1 ngày
-        if not hc_gio and \
-           not hc_tl and \
-           not tns_nghi and \
-           not tc_gio and \
-           not tc_tl:
-            return None
+        if not gio_HC and not ti_le_HC and not TSN_nghi_HC and not gio_TC and not ti_le_TC:
+            continue
         gchn = GhiChepHangNgay(
             ngay= _ngay,
-            gio_HC= _df[hc_gio][idx],
-            ti_le_HC= _df[hc_tl][idx],
-            TSN_nghi_HC= _df[tns_nghi][idx],
-            gio_TC= _df[tc_gio][idx],
-            ti_le_TC = _df[tc_tl][idx]
+            gio_HC= gio_HC,
+            ti_le_HC = ti_le_HC,
+            TSN_nghi_HC= TSN_nghi_HC,
+            gio_TC= gio_TC,
+            ti_le_TC = ti_le_TC
         )
         lst_ghi_chep_hang_ngay.append(gchn)
         
