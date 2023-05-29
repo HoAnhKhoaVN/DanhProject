@@ -1,5 +1,11 @@
 from pickle import dump, load
 from typing import Text, Any
+from collections import defaultdict
+def create_list_defaultdict():
+    """Tạo một defaultdict để có thể dump thành file pickle
+    Sửa lỗi dựa: https://stackoverflow.com/questions/72339545/attributeerror-cant-pickle-local-object-locals-lambda
+    """
+    return defaultdict(list)
 
 def load_pickle(fn: Text):
     with open(fn, "rb") as f:
