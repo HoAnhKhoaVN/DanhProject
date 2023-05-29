@@ -8,6 +8,11 @@ from constant import (
 import pandas as pd
 from collections import defaultdict
 
+def create_list_defaultdict():
+    """Tạo một defaultdict để có thể dump thành file pickle
+    Sửa lỗi dựa: https://stackoverflow.com/questions/72339545/attributeerror-cant-pickle-local-object-locals-lambda
+    """
+    return defaultdict(list)
 
 class NhanVien:
     def __init__(
@@ -75,13 +80,14 @@ def get_value_for_staff(
     ten_nv = df[CV][IDX_TEN_NHAN_VIEN]
 
     # Lấy số công việc nhân viên làm trong tháng
-    dict_ghi_chep_cong_viec = defaultdict(list)
+    dict_ghi_chep_cong_viec = defaultdict(create_list_defaultdict)
     N = len(df)
     for idx in range(START_INDEX,N):
         cv = get_task(idx = idx, df = df)
         if cv:
             ten_cv = cv.ten_cong_viec
-            dict_ghi_chep_cong_viec[ten_cv].append(cv)
+            ban_ve = cv.ban_ve
+            dict_ghi_chep_cong_viec[ten_cv][ban_ve].append(cv)
     # Tạo một ghi chép công việc cho nhận viên trong 1 tháng
     return NhanVien(
         msnv= manv,
