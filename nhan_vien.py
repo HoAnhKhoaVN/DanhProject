@@ -1,4 +1,5 @@
-from typing import Text, Dict
+from typing import Text, Dict, Tuple, List
+from ghi_chep_hang_ngay import GhiChepHangNgay
 from cong_viec import CongViec, get_task
 from constant import (
     IDX_TEN_NHAN_VIEN,
@@ -19,11 +20,13 @@ class NhanVien:
         self,
         msnv: int,
         ho_ten: Text,
-        dict_ghi_chep_cong_viec: Dict[Text, CongViec]
+        dict_ghi_chep_cong_viec: Dict[Text, CongViec],
+        dict_ghi_chep_theo_ngay: Dict[Tuple[Text,Text], List[GhiChepHangNgay]]
     ) -> None:
         self.msnv = msnv
         self.ho_ten = ho_ten
         self.dict_ghi_chep_cong_viec = dict_ghi_chep_cong_viec
+        self.dict_ghi_chep_theo_ngay = dict_ghi_chep_theo_ngay
 
     def thong_ke(self):
         pass
@@ -57,6 +60,18 @@ class NhanVien:
 
     def get_so_cong_viec_chua_hoan_thanh(self):
         pass
+
+    def get_so_ngay_tang_ca(self):
+        pass
+
+    def get_so_ngay_khong_lam(self):
+        pass
+
+    def get_so_ngay_hang_chanh(self):
+        pass
+
+    def get_so_ngay_nghi_phep(self):
+        pass
     
 
 
@@ -84,6 +99,7 @@ def get_value_for_staff(
     N = len(df)
     for idx in range(START_INDEX,N):
         cv = get_task(idx = idx, df = df)
+        ghi_chep_hang_ngay = get_ghi_chep_trong_ngay(df = df)
         if cv:
             ten_cv = cv.ten_cong_viec
             ban_ve = cv.ban_ve
