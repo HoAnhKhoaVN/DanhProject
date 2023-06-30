@@ -4,3 +4,10 @@ __pycache__/*
 *.ipynb
 *.xlsx
 # *.xls
+
+# Unnecessary folder
+1712531/*
+build/*
+dist/*
+build
+dist

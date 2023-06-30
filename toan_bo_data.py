@@ -4,6 +4,7 @@ from tqdm import tqdm
 import os
 from constant import SEP
 from ghi_chep_nam import get_ghi_chep_hang_nam
+from nhan_vien import NhanVien
 
 
 def get_toan_bo_data(root: Text):
@@ -45,7 +46,57 @@ class ToanBoData:
     def ve_so_do(self):
         pass
 
+    def get_danh_sach_nam(self):
+        return list(self.dict_ghi_chep_cac_nam.keys())
+    
+    def get_danh_sach_thang(
+        self,
+        nam: Text
+    ):  
+        lst_nam = self.get_danh_sach_nam()
+        if nam not in lst_nam:
+            return []
+        return list(self.dict_ghi_chep_cac_nam[nam].dict_ghi_chep_12_thang.keys())
+
+    def get_danh_sach_nhan_vien(
+        self,
+        nam: Text,
+        thang: Text
+    ):  
+        # Kiểm tra năm
+        lst_nam = self.get_danh_sach_nam()
+        if nam not in lst_nam:
+            return []
+        
+        # Kiểm tra tháng
+        lst_thang = self.get_danh_sach_thang(nam)
+        if thang not in lst_thang:
+            return []
+        
+        return list(self.dict_ghi_chep_cac_nam[nam].dict_ghi_chep_12_thang[thang].dict_nhan_vien.keys())
+    
+    def get_thong_tin_nhan_vien(
+        self,
+        nam: Text,
+        thang: Text,
+        ma_nhan_vien: Text
+    )-> NhanVien:
+        return self.dict_ghi_chep_cac_nam[nam].dict_ghi_chep_12_thang[thang].dict_nhan_vien[ma_nhan_vien]
+        
 if __name__ == "__main__":
     print("Hello")
+
+    data :ToanBoData = load_pickle(fn = 'full_data_v3.plk' )
+
+    print(
+        data.get_danh_sach_nam(),
+        data.get_danh_sach_thang('2023'),
+        data.get_danh_sach_nhan_vien(
+            nam= '2023',
+            thang= '1'
+        )
+    )
+
+
 
     

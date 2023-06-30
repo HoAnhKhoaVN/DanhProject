@@ -10,5 +10,5 @@ def load_toan_bo_data():
 
 if __name__ == "__main__":
     print("file main.py")
-    load_toan_bo_data()
-   
+    data = load_toan_bo_data()
+       

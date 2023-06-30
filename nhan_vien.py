@@ -1,6 +1,6 @@
 from typing import Text, Dict, Tuple, List
 from ghi_chep_hang_ngay import GhiChepHangNgay
-from cong_viec import CongViec, get_task
+from cong_viec import CongViec, get_task,get_ghi_chep_trong_ngay
 from constant import (
     IDX_TEN_NHAN_VIEN,
     CV,
@@ -41,19 +41,19 @@ class NhanVien:
         return len(self.dict_ghi_chep_cong_viec)
     
     def get_cac_cong_viec_trong_thang(self):
-        return self.dict_ghi_chep_cong_viec.keys()
+        return list(self.dict_ghi_chep_cong_viec.keys())
     
     def get_so_ngay_cong(self):
         pass
 
     def get_so_ngay_nghi_phep(self):
-        pass
+        return len(self.dict_ghi_chep_cong_viec.get('Nghỉ phép', []))
 
     def get_so_ngay_di_tre(self):
-        pass
+        return len(self.dict_ghi_chep_cong_viec.get('Đi trễ', []))
 
     def get_so_ngay_ve_som(self):
-        pass
+        return len(self.dict_ghi_chep_cong_viec.get('Về sớm', []))
 
     def get_so_ban_ve_hoan_thanh(self):
         pass
@@ -70,8 +70,6 @@ class NhanVien:
     def get_so_ngay_hang_chanh(self):
         pass
 
-    def get_so_ngay_nghi_phep(self):
-        pass
     
 
 
