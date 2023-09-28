@@ -1,0 +1,20 @@
+__pycache__/*
+# Data/*
+# *.plk
+*.ipynb
+*.xlsx
+# *.xls
+
+# Unnecessary folder
+1712531/*
+build/*
+dist/*
+build
+dist
+GUI/*
+roc.py
+*.plk
+Data/*
+*.xls
+*.xlsx
+*.spec
