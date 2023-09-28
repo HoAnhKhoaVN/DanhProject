@@ -16,25 +16,26 @@ class App(customtkinter.CTk):
         ):
         super().__init__()
 
-        # region Lấy dữ liệu
+        # region 1: Lấy dữ liệu
         self.data : ToanBoData = load_pickle(fn = data_path)
         lst_nam = self.data.get_danh_sach_nam()
         # endregion
 
 
-        # configure window
+        # region 2: Configure window
         self.title("Danh Product")
         self.geometry(f"{1100}x{580}") # Chỉnh kích thước màn hình
+        # endregion
 
 
-        # Tạo một sidebar để chọn tháng và năm
+        # region 3: Tạo một sidebar để chọn tháng và năm
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
 
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Chọn tháng - năm", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        # region Chọn năm
+            # region Chọn năm
         self.nam_label = customtkinter.CTkLabel(self.sidebar_frame, text="Năm:", anchor="w")
         self.nam_label.grid(row=5, column=0, padx=20, pady=(10, 0))
         self.nam_optionemenu = customtkinter.CTkOptionMenu(
@@ -42,8 +43,9 @@ class App(customtkinter.CTk):
             values=lst_nam
         )
         self.nam_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 20))
-        # endregion
-        # region Chọn tháng
+            # endregion
+
+            # region Chọn tháng
         self.thang_label = customtkinter.CTkLabel(
             self.sidebar_frame, text="Chọn tháng:", anchor="w")
         self.thang_label.grid(row=7, column=0, padx=20, pady=(10, 0))
@@ -52,15 +54,21 @@ class App(customtkinter.CTk):
             values = self.data.get_danh_sach_thang(nam = self.nam_optionemenu.get() )
         )
         self.thang_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 10))
-        # endregion
+            # endregion
 
+            # region Truy xuất dữ liệu
         self.bt_truy_xuat = customtkinter.CTkButton(
             self.sidebar_frame, 
             command=self.sidebar_button_event,
             text= "Truy xuất"
             )
         self.bt_truy_xuat.grid(row=9, column=0, padx=20, pady=10)
-        # create slider and progressbar frame
+            # endregion
+
+        # endregion
+        
+        
+        # region 4: Create slider and progressbar frame
         self.hor_frame = customtkinter.CTkFrame(
             self,
             width=350,
@@ -78,7 +86,7 @@ class App(customtkinter.CTk):
         )
         # self.hor_frame.grid_rowconfigure(4, weight=1)
 
-        # region Logo Kết quả công việc
+            # region 4.1: Logo Kết quả công việc
         self.logo_label = customtkinter.CTkLabel(
             self.hor_frame, 
             text=f"Kết quả làm việc {self.thang_optionemenu.get().zfill(2)}/{self.nam_optionemenu.get()}", 
@@ -89,11 +97,16 @@ class App(customtkinter.CTk):
             text_color='red'
         )
         self.logo_label.grid(row=3, column=2, padx=20, pady=(20, 10))
-        # endregion
+            # endregion
 
-        # region Tải danh sách nhân viên
+            # region 4.2: Tải danh sách nhân viên
+                
+                # region 4.2.1: Nhãn `Mã nhân viên``
         self.nhan_vien_label = customtkinter.CTkLabel(self.hor_frame, text="Mã nhân viên:", anchor="w")
         self.nhan_vien_label.grid(row=4, column=1, padx=20, pady=(10, 0))
+                # endregion
+        
+                # region 4.2.2: Option Menu
         self.nhan_vien_optionemenu = customtkinter.CTkOptionMenu(
             self.hor_frame, 
             values= self.data.get_danh_sach_nhan_vien(
@@ -102,24 +115,56 @@ class App(customtkinter.CTk):
             )
         )
         self.nhan_vien_optionemenu.grid(row=4, column=2, padx=20, pady=(10, 20))
-        # endregion
+                # endregion
 
-        # region Nút bấm để "Xem chi tiết"
-        self.bt_xem_chi_tiet = customtkinter.CTkButton(
+                # region 4.2.3: Xem danh sách nhân viên
+        self.bt_xem_chi_tiet_cong_viec = customtkinter.CTkButton(
+            self.hor_frame, 
+            command=self.button_xem_nhan_vien,
+            text= "Xem nhân viên"
+        )
+        self.bt_xem_chi_tiet_cong_viec.grid(row=4, column=3, padx=20, pady=10)
+                # endregion
+
+        self.button_xem_nhan_vien()
+        # endregion
+            
+            # region Label các công việc
+        self.cac_cong_viec_label = customtkinter.CTkLabel(self.hor_frame, text=f"Các công việc: ", anchor="w")
+        self.cac_cong_viec_label.grid(row=8, column=1, padx=20, pady=(10, 0))
+            # endregion
+
+            # region options công việc
+        self.cac_cong_viec_optionemenu = customtkinter.CTkOptionMenu(
+            self.hor_frame, 
+            values= self.cac_cong_viec_trong_thang
+        )
+        self.cac_cong_viec_optionemenu.grid(row=8, column=2, padx=20, pady=(10, 20))
+            # endregion
+
+            # region nút "Xem chi tiết công việc"
+        self.bt_xem_chi_tiet_cong_viec = customtkinter.CTkButton(
             self.hor_frame, 
             command=self.button_xem_chi_tiet,
-            text= "Xem chi tiết"
+            text= "Xem chi tiết công việc"
         )
-        self.bt_xem_chi_tiet.grid(row=4, column=3, padx=20, pady=10)
+        self.bt_xem_chi_tiet_cong_viec.grid(row=8, column=3, padx=20, pady=10)
+
+            # endregion
+        # region Xem chi tiết công việc
+
 
 
         # endregion
-
+        # endregion
+        
+        
         # region Khu vực để hiển thị nội dung chi tiết cho 1 người
         self.textbox = customtkinter.CTkTextbox(self, width=350)
         self.textbox.grid(row=2, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # endregion
+
 
         # # region Khung tìm kiếm
         # self.entry = customtkinter.CTkEntry(self, placeholder_text="CTkEntry")
@@ -130,31 +175,28 @@ class App(customtkinter.CTk):
         # # endregion
 
 
-        # region create tabview
-        self.tabview = customtkinter.CTkTabview(self, width=250)
-        self.tabview.grid(row=0, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.tabview.add("CTkTabview")
-        self.tabview.add("Tab 2")
-        self.tabview.add("Tab 3")
-        self.tabview.tab("CTkTabview").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
-        self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
+        # # region create tabview
+        # self.tabview = customtkinter.CTkTabview(self, width=250)
+        # self.tabview.grid(row=0, column=3, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        # self.tabview.add("CTkTabview")
+        # self.tabview.add("Tab 2")
+        # self.tabview.add("Tab 3")
+        # self.tabview.tab("CTkTabview").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        # self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
 
-        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("CTkTabview"), dynamic_resizing=False,
-                                                        values=["Value 1", "Value 2", "Value Long Long Long"])
-        self.optionmenu_1.grid(row=0, column=3, padx=20, pady=(20, 10))
-        self.combobox_1 = customtkinter.CTkComboBox(self.tabview.tab("CTkTabview"),
-                                                    values=["Value 1", "Value 2", "Value Long....."])
-        self.combobox_1.grid(row=1, column=3, padx=20, pady=(10, 10))
-        self.string_input_button = customtkinter.CTkButton(self.tabview.tab("CTkTabview"), text="Open CTkInputDialog",
-                                                           command=self.open_input_dialog_event)
-        self.string_input_button.grid(row=2, column=3, padx=20, pady=(10, 10))
-        self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Tab 2"), text="CTkLabel on Tab 2")
-        self.label_tab_2.grid(row=0, column=3, padx=20, pady=20)
+        # self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("CTkTabview"), dynamic_resizing=False,
+        #                                                 values=["Value 1", "Value 2", "Value Long Long Long"])
+        # self.optionmenu_1.grid(row=0, column=3, padx=20, pady=(20, 10))
+        # self.combobox_1 = customtkinter.CTkComboBox(self.tabview.tab("CTkTabview"),
+        #                                             values=["Value 1", "Value 2", "Value Long....."])
+        # self.combobox_1.grid(row=1, column=3, padx=20, pady=(10, 10))
+        # self.string_input_button = customtkinter.CTkButton(self.tabview.tab("CTkTabview"), text="Open CTkInputDialog",
+        #                                                    command=self.open_input_dialog_event)
+        # self.string_input_button.grid(row=2, column=3, padx=20, pady=(10, 10))
+        # self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Tab 2"), text="CTkLabel on Tab 2")
+        # self.label_tab_2.grid(row=0, column=3, padx=20, pady=20)
 
-        # endregion
-
-        
-
+        # # endregion
 
         
     def sidebar_button_event(self):
@@ -194,31 +236,28 @@ class App(customtkinter.CTk):
         # endregion
 
     def button_xem_chi_tiet(self):
-        nhan_vien : NhanVien = self.data.get_thong_tin_nhan_vien(
-            nam = self.nam_optionemenu.get(),
-            thang= self.thang_optionemenu.get(),
-            ma_nhan_vien= self.nhan_vien_optionemenu.get()
-        )
+        text = ''
+        cv = self.cac_cong_viec_optionemenu.get()
+        ban_ve = list(self.nhan_vien.dict_ghi_chep_cong_viec[cv].keys())
+        # print(f"{cv}:{ban_ve}")
+        text+=f"***** {cv} ****\n"
+        for bv in ban_ve:
+            cong_viec = self.nhan_vien.dict_ghi_chep_cong_viec[cv][bv][0]
+            cong_doan = cong_viec.cong_doan
+            nha_may = cong_viec.nha_may
+            # so_luong = cong_viec.so_luong
+            # don_vi = cong_viec.don_vi
 
-        ho_ten_nv = nhan_vien.get_ho_ten()
-        ma_so_nv = nhan_vien.get_msnv()
-        cac_cong_viec_trong_thang = nhan_vien.get_cac_cong_viec_trong_thang()
-        so_cong_viec_trong_thang = nhan_vien.get_so_cong_viec_trong_thang()
+            so_ngay_lam = len(cong_viec.ghi_ghep_hang_ngay)
+            lst_ngay_cong = [cong_viec.ghi_ghep_hang_ngay[ngay_lam].ngay for ngay_lam in range(so_ngay_lam)]
 
-        text = f'''
-        - Mã số nhân viên: {ma_so_nv}
-        - Họ tên: {ho_ten_nv}
-        - Số công việc trong tháng : {so_cong_viec_trong_thang}
-        - Số ngày đi trễ: {nhan_vien.get_so_ngay_di_tre()}
-        - Số ngày về sớm: {nhan_vien.get_so_ngay_ve_som()}
-        - Số ngày nghỉ phép: {nhan_vien.get_so_ngay_nghi_phep()}
-        - Công việc:
-
-        '''
-        for cv in cac_cong_viec_trong_thang:
-            text+=f'\t + {cv}\n'
-
-
+            text+=(f"""
+1. Bản vẽ: {bv}
+2. Công đoạn: {cong_doan}
+3. Nhà máy : {nha_may}
+4. Số ngày làm: {so_ngay_lam}
+5: Danh sách ngày làm: {', '.join(lst_ngay_cong)}
+""")
         # Xóa toàn bộ văn bản trong textbox
         self.textbox.delete(
             index1="0.0",
@@ -231,7 +270,53 @@ class App(customtkinter.CTk):
         dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="CTkInputDialog")
         print("CTkInputDialog:", dialog.get_input())
 
+    def button_xem_nhan_vien(self):
+        # region Lấy thông tin nhân viên
+        self.nhan_vien : NhanVien = self.data.get_thong_tin_nhan_vien(
+            nam = self.nam_optionemenu.get(),
+            thang= self.thang_optionemenu.get(),
+            ma_nhan_vien= self.nhan_vien_optionemenu.get()
+        )
+        ho_ten_nv = self.nhan_vien.get_ho_ten()
+        ma_so_nv = self.nhan_vien.get_msnv()
+        self.cac_cong_viec_trong_thang = self.nhan_vien.get_cac_cong_viec_trong_thang()
+        so_cong_viec_trong_thang = self.nhan_vien.get_so_cong_viec_trong_thang()
+        so_ngay_cong = 30
+        so_ngay_tre = self.nhan_vien.get_so_ngay_di_tre()
+        so_ngay_ve_som = self.nhan_vien.get_so_ngay_ve_som()
+        so_ngay_tang_ca = self.nhan_vien.get_so_ngay_tang_ca()
+        so_ngay_nghi_phep = self.nhan_vien.get_so_ngay_nghi_phep()
+        # endregion
 
+        # region Label Họ tên
+        self.ho_ten_label = customtkinter.CTkLabel(self.hor_frame, text=f"Họ Tên: {ho_ten_nv}", anchor="w")
+        self.ho_ten_label.grid(row=5, column=1, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Số ngày công
+        self.so_ngay_cong_label = customtkinter.CTkLabel(self.hor_frame, text=f"Số ngày công: {so_ngay_cong}", anchor="w")
+        self.so_ngay_cong_label.grid(row=6, column=1, padx=20, pady=(10, 0))
+        # endregion
+
+        # region số công việc
+        self.tang_ca_label = customtkinter.CTkLabel(self.hor_frame, text=f"Tăng ca: {so_ngay_tang_ca}", anchor="w")
+        self.tang_ca_label.grid(row=5, column=3, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Trễ
+        self.tre_label = customtkinter.CTkLabel(self.hor_frame, text=f"Trễ: {so_ngay_tre}", anchor="w")
+        self.tre_label.grid(row=5, column=2, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Sớm
+        self.som_label = customtkinter.CTkLabel(self.hor_frame, text=f"Sớm: {so_ngay_ve_som}", anchor="w")
+        self.som_label.grid(row=6, column=2, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Phép
+        self.phep_label = customtkinter.CTkLabel(self.hor_frame, text=f"Phép: {so_ngay_nghi_phep}", anchor="w")
+        self.phep_label.grid(row=6, column=3, padx=20, pady=(10, 0))
+        # endregion
 if __name__ == "__main__":
     app = App()
     app.mainloop()
