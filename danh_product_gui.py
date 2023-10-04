@@ -125,8 +125,6 @@ class App(customtkinter.CTk):
         )
         self.bt_xem_chi_tiet_cong_viec.grid(row=4, column=3, padx=20, pady=10)
                 # endregion
-
-        self.button_xem_nhan_vien()
         # endregion
             
             # region Label các công việc
@@ -135,6 +133,47 @@ class App(customtkinter.CTk):
             # endregion
 
             # region options công việc
+        self.nhan_vien = None
+        self.ho_ten_nv = None
+        self.ma_so_nv = None
+        self.cac_cong_viec_trong_thang = ""
+        self.so_cong_viec_trong_thang = None
+        self.so_ngay_cong = 30
+        self.so_ngay_tre = None
+        self.so_ngay_ve_som = None
+        self.so_ngay_tang_ca = None
+        self.so_ngay_nghi_phep = None
+
+        # region Label Họ tên
+        self.ho_ten_label = customtkinter.CTkLabel(self.hor_frame, text=f"Họ Tên: {self.ho_ten_nv}", anchor="w")
+        self.ho_ten_label.grid(row=5, column=1, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Số ngày công
+        self.so_ngay_cong_label = customtkinter.CTkLabel(self.hor_frame, text=f"Số ngày công: {self.so_ngay_cong}", anchor="w")
+        self.so_ngay_cong_label.grid(row=6, column=1, padx=20, pady=(10, 0))
+        # endregion
+
+        # region số công việc
+        self.tang_ca_label = customtkinter.CTkLabel(self.hor_frame, text=f"Tăng ca: {self.so_ngay_tang_ca}", anchor="w")
+        self.tang_ca_label.grid(row=5, column=3, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Trễ
+        self.tre_label = customtkinter.CTkLabel(self.hor_frame, text=f"Trễ: {self.so_ngay_tre}", anchor="w")
+        self.tre_label.grid(row=5, column=2, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Sớm
+        self.som_label = customtkinter.CTkLabel(self.hor_frame, text=f"Sớm: {self.so_ngay_ve_som}", anchor="w")
+        self.som_label.grid(row=6, column=2, padx=20, pady=(10, 0))
+        # endregion
+
+        # region Phép
+        self.phep_label = customtkinter.CTkLabel(self.hor_frame, text=f"Phép: {self.so_ngay_nghi_phep}", anchor="w")
+        self.phep_label.grid(row=6, column=3, padx=20, pady=(10, 0))
+        # endregion
+
         self.cac_cong_viec_optionemenu = customtkinter.CTkOptionMenu(
             self.hor_frame, 
             values= self.cac_cong_viec_trong_thang
@@ -151,11 +190,6 @@ class App(customtkinter.CTk):
         self.bt_xem_chi_tiet_cong_viec.grid(row=8, column=3, padx=20, pady=10)
 
             # endregion
-        # region Xem chi tiết công việc
-
-
-
-        # endregion
         # endregion
         
         
@@ -200,39 +234,38 @@ class App(customtkinter.CTk):
 
         
     def sidebar_button_event(self):
-        print(f"""
-        - Tháng : {self.thang_optionemenu.get().zfill(2)}
-        - Năm : {self.nam_optionemenu.get()}
-        - Danh sách nhân viên: {self.data.get_danh_sach_nhan_vien(
-            nam=self.nam_optionemenu.get(),
-            thang= self.thang_optionemenu.get()
-        )}
-        """
-        )
         # region Logo Kết quả công việc
-        self.logo_label = customtkinter.CTkLabel(
-            self.hor_frame, 
-            text=f"Kết quả làm việc {self.thang_optionemenu.get().zfill(2)}/{self.nam_optionemenu.get()}", 
-            font=customtkinter.CTkFont(
-                size=20,
-                weight="bold",
-            ),
-            text_color='red'
-        )
-        self.logo_label.grid(row=3, column=2, padx=20, pady=(20, 10))
+        self.logo_label.configure(text = f"Kết quả làm việc {self.thang_optionemenu.get().zfill(2)}/{self.nam_optionemenu.get()}")
         # endregion
 
         # region Tải danh sách nhân viên
-        self.nhan_vien_label = customtkinter.CTkLabel(self.hor_frame, text="Mã nhân viên:", anchor="w")
-        self.nhan_vien_label.grid(row=4, column=1, padx=20, pady=(10, 0))
-        self.nhan_vien_optionemenu = customtkinter.CTkOptionMenu(
-            self.hor_frame, 
+        self.nhan_vien_optionemenu.configure(
             values= self.data.get_danh_sach_nhan_vien(
                 nam= self.nam_optionemenu.get(),
-                thang= self.thang_optionemenu.get()
-            )
+                thang= self.thang_optionemenu.get())
         )
-        self.nhan_vien_optionemenu.grid(row=4, column=2, padx=20, pady=(10, 20))
+        # endregion
+
+
+        # region Lấy danh sách công việc của nhân viên đầu tiên để hiển thị
+        self.nhan_vien : NhanVien = self.data.get_thong_tin_nhan_vien(
+            nam = self.nam_optionemenu.get(),
+            thang= self.thang_optionemenu.get(),
+            ma_nhan_vien= self.nhan_vien_optionemenu.get()
+        )
+        self.ho_ten_nv = self.nhan_vien.get_ho_ten()
+        self.ma_so_nv = self.nhan_vien.get_msnv()
+        self.cac_cong_viec_trong_thang = self.nhan_vien.get_cac_cong_viec_trong_thang()
+        self.so_cong_viec_trong_thang = self.nhan_vien.get_so_cong_viec_trong_thang()
+        self.so_ngay_cong = 30
+        self.so_ngay_tre = self.nhan_vien.get_so_ngay_di_tre()
+        self.so_ngay_ve_som = self.nhan_vien.get_so_ngay_ve_som()
+        self.so_ngay_tang_ca = self.nhan_vien.get_so_ngay_tang_ca()
+        self.so_ngay_nghi_phep = self.nhan_vien.get_so_ngay_nghi_phep()
+
+        self.cac_cong_viec_optionemenu.configure(
+            values = self.cac_cong_viec_trong_thang
+        )
         # endregion
 
     def button_xem_chi_tiet(self):
@@ -271,52 +304,12 @@ class App(customtkinter.CTk):
         print("CTkInputDialog:", dialog.get_input())
 
     def button_xem_nhan_vien(self):
-        # region Lấy thông tin nhân viên
-        self.nhan_vien : NhanVien = self.data.get_thong_tin_nhan_vien(
-            nam = self.nam_optionemenu.get(),
-            thang= self.thang_optionemenu.get(),
-            ma_nhan_vien= self.nhan_vien_optionemenu.get()
-        )
-        ho_ten_nv = self.nhan_vien.get_ho_ten()
-        ma_so_nv = self.nhan_vien.get_msnv()
-        self.cac_cong_viec_trong_thang = self.nhan_vien.get_cac_cong_viec_trong_thang()
-        so_cong_viec_trong_thang = self.nhan_vien.get_so_cong_viec_trong_thang()
-        so_ngay_cong = 30
-        so_ngay_tre = self.nhan_vien.get_so_ngay_di_tre()
-        so_ngay_ve_som = self.nhan_vien.get_so_ngay_ve_som()
-        so_ngay_tang_ca = self.nhan_vien.get_so_ngay_tang_ca()
-        so_ngay_nghi_phep = self.nhan_vien.get_so_ngay_nghi_phep()
-        # endregion
-
-        # region Label Họ tên
-        self.ho_ten_label = customtkinter.CTkLabel(self.hor_frame, text=f"Họ Tên: {ho_ten_nv}", anchor="w")
-        self.ho_ten_label.grid(row=5, column=1, padx=20, pady=(10, 0))
-        # endregion
-
-        # region Số ngày công
-        self.so_ngay_cong_label = customtkinter.CTkLabel(self.hor_frame, text=f"Số ngày công: {so_ngay_cong}", anchor="w")
-        self.so_ngay_cong_label.grid(row=6, column=1, padx=20, pady=(10, 0))
-        # endregion
-
-        # region số công việc
-        self.tang_ca_label = customtkinter.CTkLabel(self.hor_frame, text=f"Tăng ca: {so_ngay_tang_ca}", anchor="w")
-        self.tang_ca_label.grid(row=5, column=3, padx=20, pady=(10, 0))
-        # endregion
-
-        # region Trễ
-        self.tre_label = customtkinter.CTkLabel(self.hor_frame, text=f"Trễ: {so_ngay_tre}", anchor="w")
-        self.tre_label.grid(row=5, column=2, padx=20, pady=(10, 0))
-        # endregion
-
-        # region Sớm
-        self.som_label = customtkinter.CTkLabel(self.hor_frame, text=f"Sớm: {so_ngay_ve_som}", anchor="w")
-        self.som_label.grid(row=6, column=2, padx=20, pady=(10, 0))
-        # endregion
-
-        # region Phép
-        self.phep_label = customtkinter.CTkLabel(self.hor_frame, text=f"Phép: {so_ngay_nghi_phep}", anchor="w")
-        self.phep_label.grid(row=6, column=3, padx=20, pady=(10, 0))
-        # endregion
+        self.ho_ten_label.configure(text=f"Họ Tên: {self.ho_ten_nv}")
+        self.so_ngay_cong_label.configure(text=f"Số ngày công: {self.so_ngay_cong}")
+        self.tang_ca_label.configure(text=f"Tăng ca: {self.so_ngay_tang_ca}")
+        self.tre_label.configure(text=f"Trễ: {self.so_ngay_tre}")
+        self.som_label.configure(text=f"Sớm: {self.so_ngay_ve_som}")
+        self.phep_label.configure(text=f"Phép: {self.so_ngay_nghi_phep}")
 if __name__ == "__main__":
     app = App()
     app.mainloop()
