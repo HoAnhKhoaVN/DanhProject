@@ -89,7 +89,7 @@ def get_value_ghi_chep_hang_ngay(
         List[GhiChepHangNgay]: Danh sách ghi chép cho từng ngày
     """    
     lst_ghi_chep_hang_ngay = []
-    for ngay in range(1,MAX_NUM_DAY):
+    for ngay in range(1,MAX_NUM_DAY+1):
         _ngay = str(ngay).zfill(NUM_DIGIT_IN_DAY)
         hc_gio = f"{HC_GIO}{_ngay}"
         hc_tl = f"{HC_TL}{_ngay}"
