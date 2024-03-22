@@ -85,6 +85,7 @@ def get_task(
     chu_thich = df[CHU_THICH][idx]
 
     ghi_chep_hang_ngay = get_value_ghi_chep_hang_ngay(idx = idx, _df = df)
+    # print(f'Tên công việc - ghi chép hằng ngày:{ten_cong_viec}- {ghi_chep_hang_ngay}')
 
     if ghi_chep_hang_ngay:
         cv = CongViec(
@@ -171,7 +172,7 @@ def get_ngay_nghi(df: pd.DataFrame, ngay: int):
 def get_ghi_chep_trong_ngay(df: pd.DataFrame):
     result = {}
     la_ngay_nghi = False
-    for ngay in range(1, MAX_NUM_DAY):
+    for ngay in range(1, MAX_NUM_DAY+1):
         tmp_dict = {}
         # B1: Kiểm tra có phải là ngày nghỉ không?
         lst_idx_nts, lst_gio_nts = get_ngay_nghi(
