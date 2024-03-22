@@ -74,7 +74,8 @@ def get_ghi_chep_hang_tháng(
     # Tạo ghi chép trong tháng cho từng nhân viên
     dict_nhan_vien = {}
     for manv in lst_ma_nhan_vien:
-        temp_df = clear_dataframe(df[manv])
+        temp_df : pd.DataFrame = clear_dataframe(df[manv])
+        temp_df.to_excel('output.xlsx',sheet_name= 'demo') 
         nv = get_value_for_staff(
             manv= manv,
             df = temp_df
