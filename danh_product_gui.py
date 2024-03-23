@@ -10,7 +10,7 @@ from utils import load_pickle, latest_change, dump_pickle, open_file
 from tkinter.filedialog import askopenfile
 from toan_bo_data import ToanBoData
 from nhan_vien import NhanVien
-from constant import DATANAME, DATAPATH, OUTPUT_PRINT_EXCEL
+from constant import DATANAME, DATAPATH, OUTPUT_PRINT_EXCEL, TEMPLATE_EXCEL
 from ghi_chep_hang_ngay import GhiChepHangNgay, HanhChanh, TangCa
 from cong_viec import CongViec
 import os
@@ -455,7 +455,7 @@ class App(customtkinter.CTk):
                 lst_nhan_vien_need_print.append(k)
 
         # region Load tempalte
-        workbook = openpyxl.load_workbook('template.xlsx')
+        workbook = openpyxl.load_workbook(TEMPLATE_EXCEL)
         sheet = workbook.active
         # endregion
 
