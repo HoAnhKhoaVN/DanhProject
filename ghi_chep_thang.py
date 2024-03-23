@@ -4,6 +4,7 @@ from constant import (
     NUM_DIGIT_IN_DAY,
     MAX_NUM_DAY,
     LST_FIELD_DAILY,
+    OUTPUT_EXCEL,
     TNS,
     GIO_TL,
     COT_CO_DINH,
@@ -75,7 +76,7 @@ def get_ghi_chep_hang_tháng(
     dict_nhan_vien = {}
     for manv in lst_ma_nhan_vien:
         temp_df : pd.DataFrame = clear_dataframe(df[manv])
-        temp_df.to_excel('output.xlsx',sheet_name= 'demo') 
+        temp_df.to_excel(OUTPUT_EXCEL,sheet_name= 'demo') 
         nv = get_value_for_staff(
             manv= manv,
             df = temp_df
