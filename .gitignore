@@ -6,15 +6,9 @@ __pycache__/*
 # *.xls
 
 # Unnecessary folder
-1712531/*
-build/*
-dist/*
-build
-dist
 GUI/*
-roc.py
 *.plk
-Data/*
+DATA/*
 *.xls
 *.xlsx
 *.spec
