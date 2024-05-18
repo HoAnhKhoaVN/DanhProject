@@ -1,0 +1,6 @@
+README.md
+setup.py
+danh_product.egg-info/PKG-INFO
+danh_product.egg-info/SOURCES.txt
+danh_product.egg-info/dependency_links.txt
+danh_product.egg-info/top_level.txt
