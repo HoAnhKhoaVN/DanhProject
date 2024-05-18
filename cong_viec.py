@@ -21,8 +21,30 @@ from constant import (
     TNS_NGHI,
     TC_TL,
     HC_TL,
-    MAX_NUM_DAY
+    MAX_NUM_DAY,
+    NGHI_PHEP,
+    VE_SOM,
+    DI_TRE
 )
+
+def preprocess_ten_cv(ten_cv: Text)-> Text:
+    """_summary_
+
+    Args:
+        ten_cv (Text): _description_
+
+    Returns:
+        Text: _description_
+    """
+    if ten_cv.strip().lower() in ['nghỉ phép', 'nghĩ phép']:
+        return NGHI_PHEP
+    
+    if ten_cv.strip().lower() in ['về sớm', 'sớm']:
+        return VE_SOM
+    
+    if ten_cv.strip().lower() in ['đi trể', 'đi trễ']:
+        return DI_TRE
+    return ten_cv
 
 
 class CongViec:
@@ -42,7 +64,7 @@ class CongViec:
         chu_thich: Text,
         ghi_ghep_hang_ngay: List[GhiChepHangNgay]
     ) -> None:
-        self.ten_cong_viec = ten_cong_viec
+        self.ten_cong_viec = preprocess_ten_cv(ten_cong_viec)
         self.ban_ve = ban_ve
         self.cong_doan = cong_doan
         self.nha_may = nha_may

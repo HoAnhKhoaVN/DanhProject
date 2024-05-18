@@ -45,7 +45,7 @@ class HanhChanh:
         return not self.gio and not self.ti_le and not self.TSN_nghi
 
 
-class GhiChepHangNgay:
+class   GhiChepHangNgay:
     def __init__(
         self,
         ngay: Text,

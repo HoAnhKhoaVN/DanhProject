@@ -10,7 +10,7 @@ from utils import load_pickle, latest_change, dump_pickle, open_file
 from tkinter.filedialog import askopenfile
 from toan_bo_data import ToanBoData
 from nhan_vien import NhanVien
-from constant import DATANAME, DATAPATH, OUTPUT_PRINT_EXCEL, TEMPLATE_EXCEL
+from constant import DATANAME, DATAPATH, DI_TRE, NGHI_PHEP, OUTPUT_PRINT_EXCEL, TANG_CA, TEMPLATE_EXCEL, VE_SOM
 from ghi_chep_hang_ngay import GhiChepHangNgay, HanhChanh, TangCa
 from cong_viec import CongViec
 import os
@@ -613,7 +613,7 @@ class App(customtkinter.CTk):
         text+=f"***** {cv} ****\n"
         lst_ngay_tre = []
         lst_so_phut_tre = []
-        if 'trễ' in cv or 'trể' in cv:
+        if cv == DI_TRE:
             for bv in ban_ve:
                 cong_viec : CongViec = self.nhan_vien.dict_ghi_chep_cong_viec[cv][bv][0]
                 # Ngày trễ
@@ -628,7 +628,7 @@ class App(customtkinter.CTk):
                 text+=f'''
 {idx+1}. Ngày {ngay} trễ {phut} phút.
 '''     
-        elif cv == 'Tăng ca':
+        elif cv == TANG_CA:
             (
                 so_gio_tang_ca,
                 lst_ngay_tang_ca,
@@ -641,7 +641,7 @@ class App(customtkinter.CTk):
 {idx+1}. Ngày {ngay} tăng ca {gio} giờ cho công việc {_cong_viec} - bản vẽ {_ban_ve}.
 '''         
             text+=f'\n==> Tổng cộng tăng ca: {so_gio_tang_ca} (giờ)'
-        elif cv == 'Về sớm':
+        elif cv == VE_SOM:
             (
                 so_gio_ve_som,
                 lst_ngay_ve_som,
@@ -651,8 +651,8 @@ class App(customtkinter.CTk):
                 text+=f'''
 {idx+1}. Ngày {ngay} về sớm {gio} giờ.
 '''         
-            text+=f'\n==> Tổng cộng về sớm: {so_gio_ve_som} (giờ)'
-        elif cv == 'Nghỉ phép':
+            text+=f'\n==> Tổng cộng về sớm: {so_gio_ve_som} (phút)'
+        elif cv == NGHI_PHEP:
             (
                 so_gio_nghi_phep,
                 lst_ngay_nghi_phep,
@@ -662,7 +662,7 @@ class App(customtkinter.CTk):
                 text+=f'''
 {idx+1}. Ngày {ngay} nghỉ phép {gio} giờ.
 '''         
-            text+=f'\n==> Tổng cộng nghỉ phép: {so_gio_nghi_phep} (giờ)'
+            text+=f'\n==> Tổng cộng nghỉ phép: {so_gio_nghi_phep} (phút)'
         else:
             for bv in ban_ve:
                 cong_viec = self.nhan_vien.dict_ghi_chep_cong_viec[cv][bv][0]
@@ -693,20 +693,20 @@ class App(customtkinter.CTk):
                         lst_gio_hanh_chanh.append(hanh_chinh.gio)
                         lst_ti_le_hanh_chanh.append(hanh_chinh.ti_le)
                         lst_tsn_nghi_hanh_chanh.append(hanh_chinh.TSN_nghi)
-
+                
                 ti_le = 0
-                # print(f'lst_ti_le_tang_ca : {lst_ti_le_tang_ca}')
+                print(f'lst_ti_le_tang_ca : {lst_ti_le_tang_ca}')
                 lst_ti_le_tang_ca = list(map(lambda x: 0 if x is None else x,  lst_ti_le_tang_ca))
                 if lst_ti_le_tang_ca is not None:
                     lst_ti_le_hanh_chanh.extend(lst_ti_le_tang_ca)
 
-                # print(f'lst_ti_le_hanh_chanh : {lst_ti_le_hanh_chanh}')
+                print(f'lst_ti_le_hanh_chanh : {lst_ti_le_hanh_chanh}')
                 lst_ti_le_hanh_chanh = list(map(lambda x: 0 if x is None else x,  lst_ti_le_hanh_chanh))
                 if lst_ti_le_hanh_chanh :
                     ti_le = max(lst_ti_le_hanh_chanh)*100
 
-                # print(f'lst_gio_hanh_chanh: {lst_gio_hanh_chanh}')
-                # print(f'lst_gio_hanh_chanh: {lst_gio_tang_ca}')
+                print(f'lst_gio_hanh_chanh: {lst_gio_hanh_chanh}')
+                print(f'lst_gio_hanh_chanh: {lst_gio_tang_ca}')
                 tong_gio_hc = sum(lst_gio_hanh_chanh)
                 tong_gio_tc = sum(lst_gio_tang_ca)
                     
@@ -743,6 +743,21 @@ class App(customtkinter.CTk):
             thang= self.thang_optionemenu.get(),
             ma_nhan_vien= self.nhan_vien_optionemenu.get()
         )
+
+        # region Update checkbox cho nhân viên
+        lst_nhan_vien = self.data.get_danh_sach_nhan_vien(
+                nam= self.nam_optionemenu.get(),
+                thang= self.thang_optionemenu.get()
+            )
+        self.dict_nhan_vien_checkbox = {}
+        for idx, x in enumerate(lst_nhan_vien, start= 1):
+            self.dict_nhan_vien_checkbox[x] = customtkinter.CTkCheckBox(master=self.sidebar_frame_print, text = x  )
+            if idx % 2 == 0: #chan
+                self.dict_nhan_vien_checkbox[x].grid(row=idx, column=0, pady=(0, 0), padx=0, sticky="n")
+            else:
+                self.dict_nhan_vien_checkbox[x].grid(row=idx+1, column=1, pady=(0, 0), padx=0, sticky="n")
+
+        # endregion
         self.ho_ten_nv = self.nhan_vien.get_ho_ten()
         self.ma_so_nv = self.nhan_vien.get_msnv()
         self.cac_cong_viec_trong_thang = self.nhan_vien.get_cac_cong_viec_trong_thang()
@@ -753,7 +768,7 @@ class App(customtkinter.CTk):
         self.so_gio_tang_ca, *_= self.nhan_vien.get_so_gio_tang_ca()
         self.so_gio_nghi_phep, *_ = self.nhan_vien.get_so_gio_nghi_phep()
 
-        lst_cong_viec = self.cac_cong_viec_trong_thang + ['Tăng ca']
+        lst_cong_viec = self.cac_cong_viec_trong_thang + [TANG_CA]
         self.cac_cong_viec_optionemenu.configure(
             values = lst_cong_viec
         )

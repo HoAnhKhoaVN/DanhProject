@@ -4,7 +4,8 @@ from cong_viec import CongViec
 from ghi_chep_hang_ngay import HanhChanh, TangCa
 from constant import (
     DATANAME,
-    DATAPATH
+    DATAPATH,
+    NGHI_PHEP
 )
 
 def load_toan_bo_data(root= DATAPATH , cache_path= DATANAME):
@@ -71,7 +72,7 @@ if __name__ == "__main__":
         
 
     # print(f'Số phút về sớm')
-    # ve_som : dict = data.dict_ghi_chep_cac_nam['2023'].dict_ghi_chep_12_thang['1'].dict_nhan_vien['3823'].dict_ghi_chep_cong_viec['Về sớm']
+    # ve_som : dict = data.dict_ghi_chep_cac_nam['2023'].dict_ghi_chep_12_thang['1'].dict_nhan_vien['3823'].dict_ghi_chep_cong_viec[VE_SOM]
 
     # cv = 'Đi trể'
     # # for v in di_tre.values():
@@ -92,7 +93,7 @@ if __name__ == "__main__":
     #     hour = sum(lst_gio_ve_som)
     # print(f'Sum hour : {hour}')
         
-    nghi_phep : dict = data.dict_ghi_chep_cac_nam['2023'].dict_ghi_chep_12_thang['1'].dict_nhan_vien['1883'].dict_ghi_chep_cong_viec['Nghỉ phép']
+    nghi_phep : dict = data.dict_ghi_chep_cac_nam['2023'].dict_ghi_chep_12_thang['1'].dict_nhan_vien['1883'].dict_ghi_chep_cong_viec[NGHI_PHEP]
     lst_ngay_nghi_phep = []
     lst_gio_nghi_phep = []
     for v in nghi_phep.values():

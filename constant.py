@@ -51,7 +51,10 @@ OUTPUT_EXCEL = 'OUTPUT/output.xlsx'
 OUTPUT_PRINT_EXCEL = 'OUTPUT_PRINT_EXCEL'
 TEMPLATE_EXCEL = 'TEMPLATE/template.xlsx'
 
-
+NGHI_PHEP = 'nghi_phep'
+VE_SOM = 've_som'
+DI_TRE = 'di_tre'
+TANG_CA = 'Tăng ca'
 
 if __name__ == "__main__":
     print("file constant.py")
